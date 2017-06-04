@@ -4,22 +4,34 @@
 # 1 usd = 0.89 eur
 
 # tegeleme töötlusega ainult siis kui andmed on postitud
+function puhasta($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+return $data;
+}
+
 if(isset($_POST['summa'])) {
-    $summa = htmlspecialchars($_POST['summa']);
-    $valuuta = htmlspecialchars($_POST['valuuta']);
+    $summa = puhasta($_POST['summa']);
+    $valuuta = puhasta($_POST['valuuta']);
 # echo "$_POST[summa] <br>";
 # echo "$_POST[valuuta]";
 
 # konverteerime vastavalt kasutaja valitule:
 if ( $valuuta == "eurusd") {
     $tulemus = $summa * 1.13;
-    echo "konverdime $summa eurot $tulemus dollariks ";
+    echo "<div class=keskel>";
+    echo "konverdime $summa eurot $tulemus dollariks (1 eur = 1.13 usd)";
+    echo "</div>";
 }
 
 if ( $valuuta == "usdeur") {
      $tulemus = $summa * 0.89;
-     echo "konverdime $summa dollarit $tulemus euroks ";
-    }
+    echo "<div class=keskel>";
+    echo "konverdime $summa dollarit $tulemus euroks (1 usd = 0.89 eur)";
+    echo "</div>";
+
+}
 
 }
 
@@ -31,7 +43,7 @@ if ( $valuuta == "usdeur") {
 </head>
 <body>
 <div class="keskel">
-<form action = "<?php $_PHP_SELF ?>" method = "POST">
+<form action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method = "POST">
     Summa: <input type = "text" name = "summa" />
     <p>
     <input type="radio" name="valuuta" value="eurusd" checked>EUR-USD
